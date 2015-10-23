@@ -1,0 +1,34 @@
+{
+  "name": "hitchbuddy-server",
+  "version": "1.0.0",
+  "description": "Server Api for hitchbuddy.org",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hitchbuddy/hitchbuddy-server.git"
+  },
+  "keywords": [
+    "hitchbuddy"
+  ],
+  "author": "Inderpal Singh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hitchbuddy/hitchbuddy-server/issues"
+  },
+  "homepage": "https://github.com/hitchbuddy/hitchbuddy-server#readme",
+  "dependencies": {
+    "express": "^4.13.3",
+    "immutable": "^3.7.5",
+    "redux": "^3.0.4",
+    "socket.io": "^1.3.7"
+  },
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "chai": "^3.4.0",
+    "chai-immutable": "^1.3.0",
+    "mocha": "^2.3.3"
+  }
+}
