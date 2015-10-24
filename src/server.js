@@ -1,28 +1,30 @@
 import express from 'express';
 import http from 'http';
 import SocketIO from 'socket.io';
+import {findHitchhikers} from './action-creators';
+
 const app = express();
 const httpServer = http.createServer(app);
 const port = process.env.PORT || 5000;
 
-let server = {
-  listen (customPort) {
+const server = {
+  listen(store, customPort) {
     const io = new SocketIO(httpServer);
 
     io.on('connection', (socket) => {
-      socket.on('REQUEST_HITCHHIKERS_BY_CITY', (data, callback) => {
-        console.log('haha');
+      socket.on('FIND_HITCHHIKERS_BY_CITY', (data, callback) => {
+        store.dispatch(findHitchhikers(data.city));
         callback();
       });
     });
 
-    let listen = typeof(customPort) === 'undefined' ? port : customPort;
+    const listen = typeof(customPort) === 'undefined' ? port : customPort;
     httpServer.listen(listen);
   },
 
-  close () {
+  close() {
     httpServer.close();
-  }
+  },
 };
 
 module.exports = server;
