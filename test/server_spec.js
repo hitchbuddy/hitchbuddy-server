@@ -1,14 +1,11 @@
 import chai from 'chai';
-import http from 'http';
+import {describe, it, before, after, beforeEach, afterEach} from 'mocha';
 import server from './../src/server';
 import io from 'socket.io-client';
-
 const port = 1337;
-const url = 'http://localhost:'+port;
+chai.should();
 
-const should = chai.should();
-
-describe("hitchhikers", () => {
+describe('hitchhikers', () => {
   let socket;
 
   before(() => {
@@ -21,21 +18,21 @@ describe("hitchhikers", () => {
 
   beforeEach((done) => {
     socket = io.connect('http://localhost:1337', {
-      'reconnection delay' : 0 , 'reopen delay' : 0, 'force new connection' : true
+      'reconnection delay': 0, 'reopen delay': 0, 'force new connection': true,
     });
-    socket.on('connect', function() {
+    socket.on('connect', () => {
       done();
     });
   });
 
   afterEach((done) => {
-    socket.on('disconnect', function() {
+    socket.on('disconnect', () => {
       done();
     });
     socket.disconnect();
   });
 
-  it("should initialize the app state and return to client", (done) => {
+  it('should initialize the app state and return to client', (done) => {
     socket.emit('INITIALIZE');
 
     socket.on('state', (state) => {
@@ -47,7 +44,7 @@ describe("hitchhikers", () => {
     });
   });
 
-  it("should ask the server to give the list of hitchhikers of a given city", (done) => {
+  it('should ask the server to give the list of hitchhikers of a given city', (done) => {
     socket.emit('FIND_HITCHHIKERS_BY_CITY', {state: {
       hitchhikers: [],
       currentCity: 'Berlin',

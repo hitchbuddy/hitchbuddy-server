@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "./node_modules/.bin/babel-node index.js",
-    "test": "eslint src && mocha --compilers js:babel/register  --require ./test/test_helper.js  --recursive"
+    "test": "eslint src && eslint test && mocha --compilers js:babel/register  --require ./test/test_helper.js  --recursive"
   },
   "engines": {
     "node": "0.11.x"
