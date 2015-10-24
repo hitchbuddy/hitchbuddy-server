@@ -19,13 +19,18 @@ describe("hitchhikers", () => {
   });
 
   afterEach(() => {
+    socket.disconnect();
     server.close();
   });
 
   it("should ask the server to give the list of hitchhikers of a given city", (done) => {
     const stateAfterInit = store.getState();
+
     socket.on('connect', function(){
       socket.emit('FIND_HITCHHIKERS_BY_CITY', {city: 'New Delhi'}, () => {});
+      socket.on('state', (state) => {
+        state.hitchhikers.should.eql(['hitchhiker1', 'hitchhiker2']);
+      });
     });
 
     store.subscribe(() => {

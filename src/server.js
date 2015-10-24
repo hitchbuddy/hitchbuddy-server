@@ -11,6 +11,10 @@ const server = {
   listen(store, customPort) {
     const io = new SocketIO(httpServer);
 
+    store.subscribe(
+      () => io.emit('state', store.getState())
+    );
+
     io.on('connection', (socket) => {
       socket.on('FIND_HITCHHIKERS_BY_CITY', (data, callback) => {
         store.dispatch(findHitchhikers(data.city));
