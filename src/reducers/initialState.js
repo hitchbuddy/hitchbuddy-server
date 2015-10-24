@@ -1,4 +1,4 @@
 export default function initialState() {
-  return Object.assign({}, {hitchhikers: []});
+  return Object.assign({}, {hitchhikers: [], currentCity: ''});
 }
 

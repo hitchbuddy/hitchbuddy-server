@@ -1,6 +1,5 @@
 import chai from 'chai';
 import http from 'http';
-import makeStore from './../src/store';
 import server from './../src/server';
 import io from 'socket.io-client';
 
@@ -10,33 +9,55 @@ const url = 'http://localhost:'+port;
 const should = chai.should();
 
 describe("hitchhikers", () => {
-  let socket, store;
+  let socket;
 
-  beforeEach(() => {
-    store = makeStore();
-    server.listen(store, port);
-    socket = io.connect('http://localhost:1337');
+  before(() => {
+    server.listen(port);
   });
 
-  afterEach(() => {
-    socket.disconnect();
+  after(() => {
     server.close();
   });
 
-  it("should ask the server to give the list of hitchhikers of a given city", (done) => {
-    const stateAfterInit = store.getState();
-
-    socket.on('connect', function(){
-      socket.emit('FIND_HITCHHIKERS_BY_CITY', {city: 'New Delhi'}, () => {});
-      socket.on('state', (state) => {
-        state.hitchhikers.should.eql(['hitchhiker1', 'hitchhiker2']);
-      });
+  beforeEach((done) => {
+    socket = io.connect('http://localhost:1337', {
+      'reconnection delay' : 0 , 'reopen delay' : 0, 'force new connection' : true
     });
+    socket.on('connect', function() {
+      done();
+    });
+  });
 
-    store.subscribe(() => {
-      stateAfterInit.hitchhikers.should.eql([]);
-      store.getState().hitchhikers.should.eql(['hitchhiker1', 'hitchhiker2']);
+  afterEach((done) => {
+    socket.on('disconnect', function() {
+      done();
+    });
+    socket.disconnect();
+  });
+
+  it("should initialize the app state and return to client", (done) => {
+    socket.emit('INITIALIZE', {});
+    socket.on('state', (state) => {
+      state.should.eql({
+        hitchhikers: [],
+        currentCity: '',
+      });
+      done();
+    });
+  });
+
+  it("should ask the server to give the list of hitchhikers of a given city", (done) => {
+    socket.emit('FIND_HITCHHIKERS_BY_CITY', {state: {
+      hitchhikers: [],
+      currentCity: 'Berlin',
+    }, city: 'New Delhi'}, () => {});
+    socket.on('state', (state) => {
+      state.should.eql({
+        hitchhikers: ['hitchhiker1', 'hitchhiker2'],
+        currentCity: 'New Delhi',
+      });
       done();
     });
   });
 });
+
