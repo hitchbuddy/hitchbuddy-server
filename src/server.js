@@ -7,7 +7,15 @@ const port = process.env.PORT || 5000;
 
 let server = {
   listen (customPort) {
-    new SocketIO(httpServer);
+    const io = new SocketIO(httpServer);
+
+    io.on('connection', (socket) => {
+      socket.on('REQUEST_HITCHHIKERS_BY_CITY', (data, callback) => {
+        console.log('haha');
+        callback();
+      });
+    });
+
     let listen = typeof(customPort) === 'undefined' ? port : customPort;
     httpServer.listen(listen);
   },
