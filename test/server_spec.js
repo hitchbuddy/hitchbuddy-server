@@ -36,7 +36,8 @@ describe("hitchhikers", () => {
   });
 
   it("should initialize the app state and return to client", (done) => {
-    socket.emit('INITIALIZE', {});
+    socket.emit('INITIALIZE');
+
     socket.on('state', (state) => {
       state.should.eql({
         hitchhikers: [],
@@ -51,6 +52,7 @@ describe("hitchhikers", () => {
       hitchhikers: [],
       currentCity: 'Berlin',
     }, city: 'New Delhi'}, () => {});
+
     socket.on('state', (state) => {
       state.should.eql({
         hitchhikers: ['hitchhiker1', 'hitchhiker2'],

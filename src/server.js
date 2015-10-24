@@ -13,15 +13,18 @@ const server = {
     const io = new SocketIO(httpServer);
 
     io.on('connection', (socket) => {
+      const store = makeStore();
+
+      store.subscribe(
+        () => socket.emit('state', store.getState())
+      );
+
       socket.on('INITIALIZE', () => {
-        const store = makeStore();
         socket.emit('state', store.getState());
       });
 
       socket.on('FIND_HITCHHIKERS_BY_CITY', (data) => {
-        const store = makeStore(data.state);
         store.dispatch(findHitchhikers(data.city));
-        socket.emit('state', store.getState());
       });
     });
 
