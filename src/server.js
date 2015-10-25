@@ -23,12 +23,18 @@ const server = {
         socket.emit('state', store.getState().toJS());
       });
 
-      socket.on('FIND_HITCHHIKERS_BY_CITY', (data) => {
+      socket.on('FIND_HITCHHIKERS_BY_CITY', (data, callback) => {
         store.dispatch(findHitchhikersByCity(data.city));
+        if (callback) {
+          callback();
+        }
       });
 
-      socket.on('FIND_HITCHHIKERS_BY_COUNTRY', (data) => {
+      socket.on('FIND_HITCHHIKERS_BY_COUNTRY', (data, callback) => {
         store.dispatch(findHitchhikersByCountry(data.country));
+        if (callback) {
+          callback();
+        }
       });
     });
 
