@@ -2,7 +2,7 @@ import express from 'express';
 import http from 'http';
 import SocketIO from 'socket.io';
 import makeStore from './store';
-import {findHitchhikers} from './action-creators';
+import {findHitchhikersByCity, findHitchhikersByCountry} from './action-creators';
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -16,15 +16,19 @@ const server = {
       const store = makeStore();
 
       store.subscribe(
-        () => socket.emit('state', store.getState())
+        () => socket.emit('state', store.getState().toJS())
       );
 
       socket.on('INITIALIZE', () => {
-        socket.emit('state', store.getState());
+        socket.emit('state', store.getState().toJS());
       });
 
       socket.on('FIND_HITCHHIKERS_BY_CITY', (data) => {
-        store.dispatch(findHitchhikers(data.city));
+        store.dispatch(findHitchhikersByCity(data.city));
+      });
+
+      socket.on('FIND_HITCHHIKERS_BY_COUNTRY', (data) => {
+        store.dispatch(findHitchhikersByCountry(data.country));
       });
     });
 

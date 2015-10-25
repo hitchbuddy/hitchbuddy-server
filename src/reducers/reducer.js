@@ -1,9 +1,10 @@
 import initialState from './initialState';
+import hitchhikersList from './hitchhikersList';
 
 export default function reducer(state = initialState(), action = {}) {
   switch (action.type) {
   case 'HITCHHIKERS_LIST':
-    return Object.assign({}, state, {hitchhikers: action.hitchhikers, currentCity: action.city});
+    return hitchhikersList(state, action.hitchhikers, action.city, action.country);
   default:
     return state;
   }

@@ -38,22 +38,34 @@ describe('hitchhikers', () => {
     socket.on('state', (state) => {
       state.should.eql({
         hitchhikers: [],
-        currentCity: '',
+        selectedCity: '',
+        selectedCountry: '',
       });
       done();
     });
   });
 
   it('should ask the server to give the list of hitchhikers of a given city', (done) => {
-    socket.emit('FIND_HITCHHIKERS_BY_CITY', {state: {
-      hitchhikers: [],
-      currentCity: 'Berlin',
-    }, city: 'New Delhi'}, () => {});
+    socket.emit('FIND_HITCHHIKERS_BY_CITY', {city: 'New Delhi'}, () => {});
 
     socket.on('state', (state) => {
       state.should.eql({
         hitchhikers: ['hitchhiker1', 'hitchhiker2'],
-        currentCity: 'New Delhi',
+        selectedCity: 'New Delhi',
+        selectedCountry: '',
+      });
+      done();
+    });
+  });
+
+  it('should ask the server to give the list of hitchhikers of a given country', (done) => {
+    socket.emit('FIND_HITCHHIKERS_BY_COUNTRY', {country: 'India'}, () => {});
+
+    socket.on('state', (state) => {
+      state.should.eql({
+        hitchhikers: ['hitchhiker1', 'hitchhiker2'],
+        selectedCity: '',
+        selectedCountry: 'India',
       });
       done();
     });
